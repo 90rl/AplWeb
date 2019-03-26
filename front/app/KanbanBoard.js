@@ -15,7 +15,7 @@ class KanbanBoard extends Component {
               title='Zrobione'
               cards={this.props.cards.filter((card) => card.status === "done")} />
 		 <List id='hardissue'
-              title='Trudne sprawy'
+              title='Trudne sprawy :)'
               cards={this.props.cards.filter((card) => card.status === "hardissue")} />
       </div>
     );
