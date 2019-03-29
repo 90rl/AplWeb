@@ -20,19 +20,17 @@ let cardsList = [
         id: 1,
         name: "Przykłady",
         done: true
-      }/*,
-      {
-        id: 2,
-        name: "Przykład Kanban",
-        done: false
-      },
-      {
-        id: 3,
-        name: "Moje eksperymenty",
-        done: false
       }
-	  */
     ]
+  },
+  {
+    id: 3,
+    title: "Brak słów",
+    description: "Brak słów",
+    status: "hardissue",
+    tasks: [
+	
+	]
   }
 ];
 
