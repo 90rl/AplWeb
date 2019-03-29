@@ -9,7 +9,7 @@ sudo apt install npm
 ## Uruchomienie projektu
 ```bash
 npm install
-npm run
+npm start
 ```
 
 ## URL
