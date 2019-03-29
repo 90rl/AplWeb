@@ -25,8 +25,8 @@ let cardsList = [
   },
   {
     id: 3,
-    title: "Brak słów",
-    description: "Brak słów",
+    title: "Brak słów - tytuł",
+    description: "Brak słów opis zadania",
     status: "hardissue",
     tasks: [
 	
