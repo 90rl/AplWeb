@@ -37,9 +37,9 @@ sudo usermod -a -G docker $USER
 
 ### Budowanie obrazue
 ```bash
-docker build -t trello .
+docker build --rm -t trello .
 ```
 ### Uruchomienie obrazu dockera
 ```
-docker run -p 8080:8080 -d trello
+docker run -p 8080:8080 --name hello-trello -d trello
 ```
