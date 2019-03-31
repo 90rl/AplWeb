@@ -43,3 +43,10 @@ docker build --rm -t trello .
 ```
 docker run -p 8080:8080 --name hello-trello -d trello
 ```
+
+## Budowa i uruchomienie backendu
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+Hello world bekendowe na `http://localhost:8082/auth/login`
