@@ -6,7 +6,7 @@
 
     <groupId>p.lodzka</groupId>
     <artifactId>backend</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <name>Trello Backend</name>
