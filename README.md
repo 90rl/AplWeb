@@ -18,6 +18,9 @@ sudo usermod -a -G docker $USER
 ```
 
 ## Budowanie
+
+**UWAGA** wszystkie polecenia poniżej, poza `mvn clean install` wykonywać w katalogu głównym projektu (tam gdzie plik docker-compose.yml)
+
 ### 1. Build backend.jar
 
 ```bash
