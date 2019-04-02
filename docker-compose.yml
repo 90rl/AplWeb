@@ -1,4 +1,4 @@
-version: '2.1' #this version depends on docker enginge installed
+version: '3' #this version depends on docker engine installed
 
 services:
 

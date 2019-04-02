@@ -1,24 +1,5 @@
 # trello
-
-## Instalacja (linux)
-```bash
-sudo apt install nodejs npm
-sudo apt install npm
-```
-
-## Uruchomienie projektu
-```bash
-npm install
-npm start
-```
-
-## URL
-```
-localhost:8080
-```
-
-## Dokeryzacja (linux)
-### Instalacja dockera
+## Instalacja dockera (linux)
 ```bash
 sudo apt install docker.io
 sudo systemctl start docker
@@ -30,32 +11,65 @@ docker -v
 ```
 W terminalu powinno pojawić się `Docker version 18.09.2, build 6247962`
 
-Na sam koniec wykonujemy komendę poniżej i logujemy się ponownie
+Na sam koniec wykonać komendy poniżej i przelogować się
 ```bash
+sudo apt install docker-compose
 sudo usermod -a -G docker $USER
 ```
 
-### Budowanie obrazue
-```bash
-docker build --rm -t trello .
-```
-### Uruchomienie obrazu dockera
-```
-docker run -p 8080:8080 --name hello-trello -d trello
-```
+## Budowanie
+### 1. Build backend.jar
 
-## Budowa i uruchomienie backendu
 ```bash
+cd backend
 mvn clean install
-docker build --rm -t trello-backend .
-docker run -d -p 8082:8082 --name test123 trello-backend
-```
-Hello world bekendowe na `http://localhost:8082/auth/login`
-
-```bash
-curl -X POST 'localhost:8082/auth/login'
+cd ..
 ```
 
+### 2. Build frontend + backend  docker images
+Przy pierwszym uruchamianiu budowanie obrazów może potrwać nawet 20m min
 ```bash
-curl -v -X POST 'localhost:8082/auth/register' -d '{"name": "kowalski"}'
+docker-compose build
+```
+## Uruchomienie front + backend
+```
+docker-compose up -d
+```
+
+Po wykonaniu tego polecenia frontend oraz backend powinny działać, pozostała część readme opisuje zarządzanie.
+
+## Zarzadzanie kontenerami dockera (zatrzymanie, przebudowa, postawienie)
+```bash
+docker-compose down
+docker-compose build
+docker-compose up -d
+```
+### Inne przydatne polecenia
+1. Lista działających kontenerów
+```bash
+docker ps
+```
+
+2. Lista zbudowanych obrazów
+```bash
+docker images
+```
+3. Dostęp do logów backendowych (np. aby sprawdzić czy request dotarł)
+```bash
+docker logs -f trello-backend
+docker logs -f trello-frontend
+```
+4. Bardziej zaawansowane rzeczy - grzebanie bezpośrednio w uruchomionym kontenerze, kasowanie kontenera, kasowanie obrazu
+```bash
+docker exec -it <nazwa-kontenera> bash
+docker rm <nazwa-kontenera>
+docker rmi <nazwa-obrazu>
+```
+
+
+
+Frontend powinien być dostępny na `http://localhost:8080`  
+Jak puścić przykładowego POSTa na backend?
+```bash
+curl -v 'localhost:8082/auth/register' -d '{"name": "kowalski"}'
 ```

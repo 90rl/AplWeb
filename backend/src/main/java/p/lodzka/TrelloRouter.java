@@ -13,14 +13,19 @@ import p.lodzka.model.RegisterForm;
 @Component
 public class TrelloRouter extends RouteBuilder {
 
+    public static final String APPLICATION_JSON = "application/json";
+
     @Override
     public void configure() {
         restConfiguration().component("restlet").host("0.0.0.0").port(8082).bindingMode(RestBindingMode.auto);
+        //@formatter:off
+        rest("/auth").consumes(APPLICATION_JSON).produces(APPLICATION_JSON)
+                .post("/login")
+                    .to("bean:helloBean?method=saySomething")
+                .post("/register").type(RegisterForm.class)
+                    .to("bean:helloBean?method=saySomething");
 
-        rest("/auth").consumes("application.json").produces("application/json")
-                .post("/login").to("bean:helloBean?method=saySomething")
-                .post("/register").type(RegisterForm.class).to("bean:helloBean?method=saySomething(${body})");
+        //@formatter:on
     }
-
 
 }
