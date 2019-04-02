@@ -53,5 +53,9 @@ docker run -d -p 8082:8082 --name test123 trello-backend
 Hello world bekendowe na `http://localhost:8082/auth/login`
 
 ```bash
-curl -X GET 'localhost:8082/auth/login'
+curl -X POST 'localhost:8082/auth/login'
+```
+
+```bash
+curl -v -X POST 'localhost:8082/auth/register' -d '{"name": "kowalski"}'
 ```

@@ -2,6 +2,7 @@ package p.lodzka;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import p.lodzka.model.RegisterForm;
 
 /**
  * A bean that returns a message when you call the {@link #saySomething()} method.
@@ -17,6 +18,11 @@ public class TrelloHelloBean {
 
     public String saySomething() {
         return say;
+    }
+
+    public void saySomething(RegisterForm form){
+        //todo
+        return;
     }
 
 }
