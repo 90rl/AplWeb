@@ -11,6 +11,7 @@ import p.lodzka.model.TrelloBoards;
 
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_OK;
+import static p.lodzka.config.Constants.APPLICATION_JSON;
 import static p.lodzka.config.Constants.TRELLO_BEAN;
 
 /**
@@ -35,11 +36,13 @@ public class TrelloHelloBean {
         //todo
         logger.info("Name: {}", form.getName());
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_CREATED);
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON);
         exchange.getIn().setBody(null);
     }
 
     public void getBoards(Exchange exchange){
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK);
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON);
         exchange.getIn().setBody(new TrelloBoards());
     }
 }

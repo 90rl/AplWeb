@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 import static p.lodzka.config.Constants.ROLE_USER;
 
@@ -17,11 +18,14 @@ import static p.lodzka.config.Constants.ROLE_USER;
 public class UserAuthService implements UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserAuthService.class);
+    private static final List<SimpleGrantedAuthority> AUTHORITIES = Collections.singletonList(new SimpleGrantedAuthority(ROLE_USER));
+    private static final String MOCK_PASSWORD = "abc123";
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        //todo load user and his password from db, the password should already be hashed
         logger.info("User: {}", name);
-        return new User(name, "123", Collections.singletonList(new SimpleGrantedAuthority(ROLE_USER)));
+
+        //todo load user and his password from db, the password should already be hashed
+        return User.withDefaultPasswordEncoder().username(name).password(MOCK_PASSWORD).authorities(AUTHORITIES).build();
     }
 }

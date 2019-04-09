@@ -75,5 +75,10 @@ Frontend powinien być dostępny na `http://localhost:8080`
 Jak puścić przykładowego POSTa na backend?
 ```bash
 curl -v 'localhost:8082/v1/auth/register' -d '{"name": "kowalski"}'
-curl -v 'localhost:8082/v1/trello/boards'
 ```
+
+Przykładowy GET wraz z basic auth (user: jarek, haslo: abc123)
+```bash
+curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic amFyZWs6YWJjMTIz'
+```
+W dla nieautoryzownego usera backend zwraca 403 Forbidden!
