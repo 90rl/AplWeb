@@ -60,7 +60,7 @@ docker images
 3. Dostęp do logów backendowych (np. aby sprawdzić czy request dotarł)
 ```bash
 docker logs -f trello-backend
-docker logs -f trello-frontend
+docker logs -f trello-front
 ```
 4. Bardziej zaawansowane rzeczy - grzebanie bezpośrednio w uruchomionym kontenerze, kasowanie kontenera, kasowanie obrazu
 ```bash
