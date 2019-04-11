@@ -58,13 +58,6 @@ class TrelloRouter : RouteBuilder() {
                 .to("bean:$TRELLO_SERVICE?method=addColumn")
                 .endRest()
 
-                .post("/boards/{boardId}/columns/reorder")
-                .param().name("firstColumn").type(RestParamType.query).endParam()
-                .param().name("secondColumn").type(RestParamType.query).endParam()
-                .route().process(authProcessor).policy(USER)
-                .to("bean:$TRELLO_SERVICE?method=reorderColumns")
-                .endRest()
-
                 .delete("/boards/{boardId}/columns/{columnId}")
                 .route().process(authProcessor).policy(USER)
                 .to("bean:$TRELLO_SERVICE?method=deleteColumn")
@@ -81,7 +74,12 @@ class TrelloRouter : RouteBuilder() {
                 .endRest()
 
                 .post("/boards/{boardId}/columns/{columnId}/move")
-                .param().name("task").type(RestParamType.query).endParam()
+                .param().name("toColumn").type(RestParamType.query).endParam()
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=moveColumn")
+                .endRest()
+
+                .post("/boards/{boardId}/columns/{columnId}/tasks/{taskId}/move")
                 .param().name("toColumn").type(RestParamType.query).endParam()
                 .route().process(authProcessor).policy(USER)
                 .to("bean:$TRELLO_SERVICE?method=moveTask")

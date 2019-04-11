@@ -72,9 +72,9 @@ class Trello {
         exchange.getIn().body = getUserBoard(1)
     }
 
-    fun reorderColumns(@Header("boardId") boardId: Long, @Header("firstColumn") firstColumn: Long?,
-                       @Header("secondColumn") secondColumn: Long?, exchange: Exchange) {
-        logger.info("Reordering columns: {} and: {}", firstColumn, secondColumn)
+    fun moveColumn(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long,
+                   @Header("toColumn") toColumn: Long?, exchange: Exchange) {
+        logger.info("Reordering columns: {} and: {}", columnId, toColumn)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
         exchange.getIn().body = getUserBoard(1)
@@ -97,9 +97,9 @@ class Trello {
     }
 
     fun moveTask(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long,
-                 @Header("task") task: Long?,
+                 @Header("taskId") taskId: Long?,
                  @Header("toColumn") toColumn: Long?, exchange: Exchange) {
-        logger.info("Moving task: {} toColumn: {}", task, toColumn)
+        logger.info("Moving task: {} toColumn: {}", taskId, toColumn)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
         exchange.getIn().body = getUserBoard(1)
