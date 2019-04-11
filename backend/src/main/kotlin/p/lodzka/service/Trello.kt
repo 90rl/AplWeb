@@ -2,6 +2,7 @@ package p.lodzka.service
 
 import org.apache.camel.Body
 import org.apache.camel.Exchange
+import org.apache.camel.Header
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -30,16 +31,17 @@ class Trello {
     }
 
     fun getBoards(exchange: Exchange) {
+        //todo get logged user -> get his boards
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
         exchange.getIn().body = getUserBoards()
     }
 
-    fun getBoard(exchange: Exchange) {
-        //todo get logged user -> get his boards
+    fun getBoard(@Header("boardId") boardId: Long, exchange: Exchange) {
+        logger.info("Getting board: {}", boardId)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoard(1)
+        exchange.getIn().body = getUserBoard(boardId)
     }
 
     fun addBoard(@Body form: AddBoardForm, exchange: Exchange) {

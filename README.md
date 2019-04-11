@@ -80,5 +80,45 @@ curl -v 'localhost:8082/v1/auth/register' -d '{"name": "kowalski"}'
 Przykładowy GET wraz z basic auth (user: jarek, haslo: abc123)
 ```bash
 curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic amFyZWs6YWJjMTIz'
+curl -v 'localhost:8082/v1/trello/boards/1' -H 'Authorization: Basic amFyZWs6YWJjMTIz'
 ```
 W dla nieautoryzownego usera backend zwraca 403 Forbidden!
+
+Struktura odpowiedzi dla `/boards/{boardId}`
+```json
+{
+  "id": 1,
+  "name": "Tablica1",
+  "columns": [
+    {
+      "id": 1,
+      "name": "kolumna1",
+      "order": 0,
+      "tasks": [
+        {
+          "id": 1,
+          "name": "Zadanie1",
+          "description": "Opis zadania"
+        },
+        {
+          "id": 1,
+          "name": "Zadanie2",
+          "description": "Opis zadania"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "kolumna2",
+      "order": 1,
+      "tasks": []
+    },
+    {
+      "id": 3,
+      "name": "kolumna3",
+      "order": 2,
+      "tasks": []
+    }
+  ]
+}
+```
