@@ -4,12 +4,14 @@ import org.apache.camel.CamelAuthorizationException
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.rest.RestBindingMode
+import org.apache.camel.model.rest.RestParamType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import p.lodzka.config.*
+import p.lodzka.form.TaskForm
 import p.lodzka.model.RegisterForm
-import p.lodzka.service.Boards
 import p.lodzka.processor.AuthProcessor
+import p.lodzka.service.NameForm
 import p.lodzka.service.UnauthorizedAccessException
 import javax.servlet.http.HttpServletResponse.SC_FORBIDDEN
 
@@ -31,14 +33,59 @@ class TrelloRouter : RouteBuilder() {
 
         rest(V1 + TRELLO)
                 .consumes(APPLICATION_JSON).produces(APPLICATION_JSON)
-                .get("/boards").outType(Boards::class.java)
+                .get("/boards")
                 .route().process(authProcessor).policy(USER)
                 .to("bean:$TRELLO_SERVICE?method=getBoards")
                 .endRest()
+
+                .post("/boards").type(NameForm::class.java)
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=addBoard")
+                .endRest()
+
                 .get("/boards/{boardId}")
                 .route().process(authProcessor).policy(USER)
                 .to("bean:$TRELLO_SERVICE?method=getBoard")
+                .endRest()
 
+                .delete("/boards/{boardId}")
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=deleteBoard")
+                .endRest()
+
+                .post("/boards/{boardId}/columns").type(NameForm::class.java)
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=addColumn")
+                .endRest()
+
+                .post("/boards/{boardId}/columns/reorder")
+                .param().name("firstColumn").type(RestParamType.query).endParam()
+                .param().name("secondColumn").type(RestParamType.query).endParam()
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=reorderColumns")
+                .endRest()
+
+                .delete("/boards/{boardId}/columns/{columnId}")
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=deleteColumn")
+                .endRest()
+
+                .post("/boards/{boardId}/columns/{columnId}/tasks").type(TaskForm::class.java)
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=addTask")
+                .endRest()
+
+                .delete("/boards/{boardId}/columns/{columnId}/tasks/{taskId}")
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=deleteTask")
+                .endRest()
+
+                .post("/boards/{boardId}/columns/{columnId}/move")
+                .param().name("task").type(RestParamType.query).endParam()
+                .param().name("toColumn").type(RestParamType.query).endParam()
+                .route().process(authProcessor).policy(USER)
+                .to("bean:$TRELLO_SERVICE?method=moveTask")
+                .endRest()
 
         //yes, I know about the warning, still, this is better than copy pasting same code twice
         onException(CamelAuthorizationException::class.java, UnauthorizedAccessException::class.java)

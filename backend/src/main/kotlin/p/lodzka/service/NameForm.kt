@@ -1,5 +1,5 @@
 package p.lodzka.service
 
-class AddBoardForm(
+class NameForm(
         var name: String
 )
