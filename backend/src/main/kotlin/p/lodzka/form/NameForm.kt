@@ -1,4 +1,4 @@
-package p.lodzka.service
+package p.lodzka.form
 
 class NameForm(
         var name: String

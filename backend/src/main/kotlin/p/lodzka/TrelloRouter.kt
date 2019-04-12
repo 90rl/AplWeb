@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import p.lodzka.config.*
 import p.lodzka.form.TaskForm
-import p.lodzka.model.RegisterForm
+import p.lodzka.form.RegisterForm
 import p.lodzka.processor.AuthProcessor
-import p.lodzka.service.NameForm
+import p.lodzka.form.NameForm
 import p.lodzka.service.UnauthorizedAccessException
 import javax.servlet.http.HttpServletResponse.SC_FORBIDDEN
 

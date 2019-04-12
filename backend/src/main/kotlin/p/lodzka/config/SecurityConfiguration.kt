@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.util.*
 
 @Configuration
@@ -23,11 +24,11 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
     @Autowired
     private val userDetailsService: UserDetailsService? = null
 
-    /*
+
     @Throws(Exception::class)
     fun registerAuthentication(auth: AuthenticationManagerBuilder){
-        auth.userDetailsService(userDetailsService).passwordEncoder(BCryptPasswordEncoder())
-    }*/
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder())
+    }
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
@@ -40,6 +41,11 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetailsService)
+    }
+
+    @Bean
+    fun bCryptPasswordEncoder(): BCryptPasswordEncoder {
+        return BCryptPasswordEncoder()
     }
 
     @Bean

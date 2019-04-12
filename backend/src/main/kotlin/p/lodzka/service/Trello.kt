@@ -4,27 +4,32 @@ import org.apache.camel.Body
 import org.apache.camel.Exchange
 import org.apache.camel.Header
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import p.lodzka.config.APPLICATION_JSON
 import p.lodzka.config.TRELLO_SERVICE
+import p.lodzka.form.NameForm
+import p.lodzka.form.RegisterForm
 import p.lodzka.form.TaskForm
-import p.lodzka.model.RegisterForm
+import p.lodzka.model.UserModel
+import p.lodzka.repository.UserRepository
 import javax.servlet.http.HttpServletResponse.*
 
 @Service(TRELLO_SERVICE)
 class Trello {
 
-    @Value("\${greeting}")
-    private val say: String? = null
+    @Autowired
+    lateinit var repository: UserRepository
 
-    fun saySomething(): String? {
-        return say
-    }
+    @Autowired
+    lateinit var encoder: BCryptPasswordEncoder
 
     fun register(@Body form: RegisterForm, exchange: Exchange) {
-        //todo
         logger.info("Name: {}", form.name)
+        val password = encoder.encode(form.password)
+        val user = UserModel(name = form.name, email = form.email, password = password)
+        repository.save(user)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_CREATED)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
         exchange.getIn().body = null

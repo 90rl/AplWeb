@@ -1,7 +1,12 @@
 package p.lodzka.model
 
+import javax.persistence.*
+
+@Entity
+@Table(name = "boards")
 class BoardModel(
-        var id: Long? = null,
+        @Id @GeneratedValue var id: Long,
         var name: String,
-        var columns: List<ColumnModel>
+        @ManyToMany(mappedBy = "boards") var users: List<UserModel> = mutableListOf(),
+        @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL], fetch = FetchType.EAGER) var columns: List<ColumnModel> = mutableListOf()
 )
