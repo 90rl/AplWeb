@@ -82,7 +82,11 @@ Przykładowy GET wraz z basic auth (user: jarek, haslo: abc123)
 curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic amFyZWs6YWJjMTIz'
 curl -v -X POST 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name":"wroner"}'
 curl -v 'localhost:8082/v1/trello/boards/1' -H 'Authorization: Basic amFyZWs6YWJjMTIz'
-curl -v 'localhost:8082/v1/auth/register' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name": "wroner", "email": "abc@gmail.com", "password": "abc123", "repeatPassword": "abc123"}'
+curl -v 'localhost:8082/v1/auth/register' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name": "jarek", "email": "jarek@gmail.com", "password": "abc123", "repeatPassword": "abc123"}'
+curl -v 'localhost:8082/v1/auth/register' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name": "marek", "email": "jarek@gmail.com", "password": "123", "repeatPassword": "123"}'
+curl -v 'localhost:8082/v1/auth/register' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name": "damian", "email": "jarek@gmail.com", "password": "123", "repeatPassword": "123"}'
+curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name":"tabliczka"}'
+curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic ZGFtaWFuOjEyMw==' -d '{"name":"tabliczka"}'
 ```
 W dla nieautoryzownego usera backend zwraca 403 Forbidden!
 

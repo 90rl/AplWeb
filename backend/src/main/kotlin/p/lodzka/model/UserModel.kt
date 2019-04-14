@@ -6,7 +6,7 @@ import javax.persistence.*
 @Table(name = "users")
 class UserModel(
         @Id @GeneratedValue var id: Long = 0,
-        var name: String? = null,
+        @Column(unique = true) var name: String? = null,
         var password: String,
         var email: String,
         @ManyToMany

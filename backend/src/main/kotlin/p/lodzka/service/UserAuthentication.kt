@@ -9,26 +9,31 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import p.lodzka.config.ROLE_USER
+import p.lodzka.model.UserModel
+import p.lodzka.repository.UserRepository
 
 @Service
+@Transactional(readOnly = true)
 class UserAuthentication : UserDetailsService {
 
     @Autowired
     lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
 
+    @Autowired
+    lateinit var userRepository: UserRepository
+
     @Throws(UsernameNotFoundException::class)
     override fun loadUserByUsername(name: String): UserDetails {
-        logger.info("User: {}", name)
-
-        //todo load user and his password from db, the password should already be hashed
-        return User.builder().passwordEncoder { p -> bCryptPasswordEncoder.encode(p)}.username(name).password(MOCK_PASSWORD).authorities(AUTHORITIES).build()
+        logger.info("Authenticating user: {}", name)
+        val user: UserModel = userRepository.findByName(name)
+        logger.info(user.email)
+        return User.builder().username(name).password(user.password).authorities(AUTHORITIES).build()
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(UserAuthentication::class.java)
         private val AUTHORITIES = listOf(SimpleGrantedAuthority(ROLE_USER))
-        private const val MOCK_PASSWORD = "abc123"
     }
 }
