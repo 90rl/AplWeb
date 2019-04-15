@@ -72,21 +72,17 @@ docker rmi <nazwa-obrazu>
 
 
 Frontend powinien być dostępny na `http://localhost:8080`  
-Jak puścić przykładowego POSTa na backend?
-```bash
-curl -v 'localhost:8082/v1/auth/register' -d '{"name": "kowalski"}'
-```
 
-Przykładowy GET wraz z basic auth (user: jarek, haslo: abc123)
+Przykładowrejestracja usera i operacje na tablicach (user: damian, haslo: 123)
 ```bash
-curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic amFyZWs6YWJjMTIz'
-curl -v -X POST 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name":"wroner"}'
-curl -v 'localhost:8082/v1/trello/boards/1' -H 'Authorization: Basic amFyZWs6YWJjMTIz'
-curl -v 'localhost:8082/v1/auth/register' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name": "jarek", "email": "jarek@gmail.com", "password": "abc123", "repeatPassword": "abc123"}'
-curl -v 'localhost:8082/v1/auth/register' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name": "marek", "email": "jarek@gmail.com", "password": "123", "repeatPassword": "123"}'
-curl -v 'localhost:8082/v1/auth/register' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name": "damian", "email": "jarek@gmail.com", "password": "123", "repeatPassword": "123"}'
-curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic amFyZWs6YWJjMTIz' -d '{"name":"tabliczka"}'
+#rejestracja
+curl -v 'localhost:8082/v1/auth/register' -d '{"name": "damian", "email": "damian@gmail.com", "password": "123", "repeatPassword": "123"}'
+#dodanie tablicy
 curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic ZGFtaWFuOjEyMw==' -d '{"name":"tabliczka"}'
+#wyswietlenie listy tablic
+curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
+#usuniecie tablicy
+curl -v -X DELETE 'localhost:8082/v1/trello/boards/2' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
 ```
 W dla nieautoryzownego usera backend zwraca 403 Forbidden!
 

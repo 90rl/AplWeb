@@ -18,7 +18,8 @@ import p.lodzka.model.UserModel
 import p.lodzka.repository.BoardRepository
 import p.lodzka.repository.UserRepository
 import java.util.stream.Collectors
-import javax.servlet.http.HttpServletResponse.*
+import javax.servlet.http.HttpServletResponse.SC_CREATED
+import javax.servlet.http.HttpServletResponse.SC_OK
 
 @Service(TRELLO_SERVICE)
 class Trello {
@@ -31,7 +32,6 @@ class Trello {
 
     @Autowired
     lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
-
 
 
     fun register(@Body form: RegisterForm, exchange: Exchange) {
@@ -58,8 +58,17 @@ class Trello {
     }
 
     fun deleteBoard(@Header("boardId") boardId: Long, exchange: Exchange) {
-        logger.info("Getting board: {}", boardId)
-        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_NO_CONTENT)
+        logger.info("Deleting board: {}", boardId)
+        val name = SecurityContextHolder.getContext().authentication.name
+        val user = userRepository.getByName(name)
+        user.boards.removeAll { b -> b.id == boardId }
+        userRepository.save(user)
+
+        if (userRepository.countByBoards_Id(boardId) == 0) {
+            logger.info("Deleting board permanently {}", boardId)
+            boardRepository.deleteById(boardId)
+        }
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
         exchange.getIn().body = getUserBoards()
     }
@@ -67,8 +76,8 @@ class Trello {
     fun addBoard(@Body form: NameForm, exchange: Exchange) {
         logger.info("Adding board with name: {}", form.name)
         val name = SecurityContextHolder.getContext().authentication.name
-        val user = userRepository.findByName(name)
-        user.boards += BoardModel(name = form.name)
+        val user = userRepository.getByName(name)
+        user.boards.add(BoardModel(name = form.name))
         userRepository.save(user)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
