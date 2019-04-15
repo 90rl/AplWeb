@@ -40,7 +40,6 @@ class Trello {
     @Autowired
     lateinit var taskRepository: TaskRepository
 
-
     @Autowired
     lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
 
@@ -80,7 +79,6 @@ class Trello {
         user.boards.removeAll { b -> b.id == boardId }
         userRepository.save(user)
 
-        //todo check if this works after collection refactoring
         if (!userRepository.existsByBoards_Id(boardId)) {
             logger.info("Deleting board permanently {}", boardId)
             boardRepository.deleteById(boardId)
@@ -145,6 +143,7 @@ class Trello {
         val task = taskRepository.findById(taskId).get()
         val columnModelFrom = columnRepository.findById(columnId).get()
         val columnModelTo = columnRepository.findById(toColumn).get()
+        task.column = columnModelTo
         columnModelTo.tasks.add(task)
         columnModelFrom.tasks.remove(task)
         columnRepository.saveAll(mutableListOf(columnModelFrom, columnModelTo))
