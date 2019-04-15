@@ -104,18 +104,27 @@ class Trello {
     }
 
     fun moveColumn(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long,
-                   @Header("toPosition") toPosition: Long, exchange: Exchange) {
+                   @Header("toPosition") toPosition: Int, exchange: Exchange) {
         logger.info("Reordering columns: {} and: {}", columnId, toPosition)
-      /*  val colFrom = columnRepository.findById(columnId).get()
         val boardModel = boardRepository.getById(boardId)
-        boardModel.columns.filter { it.position }
-        val temp = colFrom.position
-        colTo.position = colFrom.position
-        colFrom.position = temp
-        columnRepository.saveAll(mutableListOf(colFrom, colTo))*/
-
-        //fixme zaimplementowac porpawnie
+        validateMoveColumnRequest(boardModel.columns.size, toPosition)
+        val colFrom = boardModel.columns.first { it.id == columnId }
+        val fromPosition = colFrom.position
+        if (fromPosition < toPosition) {
+            boardModel.columns.filter { it.position in (fromPosition + 1) until (toPosition + 1) }.forEach { it.position -= 1 }
+            colFrom.position = toPosition
+            boardRepository.save(boardModel)
+        } else if (fromPosition > toPosition) {
+            boardModel.columns.filter { it.position in toPosition until fromPosition }.forEach { it.position += 1 }
+            colFrom.position = toPosition
+            boardRepository.save(boardModel)
+        }
         setStandardBoardResponse(exchange, boardId)
+    }
+
+    //todo wydzielic osobny walidator ktory zwaliduje ten i inne rodzaje requestow
+    private fun validateMoveColumnRequest(size: Int, toPosition: Int) {
+        if (toPosition < 0 || size <= toPosition) throw InvalidArgumentException("Invalid toPosition")
     }
 
     fun addTask(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long,

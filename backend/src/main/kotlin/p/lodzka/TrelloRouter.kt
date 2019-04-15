@@ -12,7 +12,9 @@ import p.lodzka.form.TaskForm
 import p.lodzka.form.RegisterForm
 import p.lodzka.processor.AuthProcessor
 import p.lodzka.form.NameForm
+import p.lodzka.service.InvalidArgumentException
 import p.lodzka.service.UnauthorizedAccessException
+import javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST
 import javax.servlet.http.HttpServletResponse.SC_FORBIDDEN
 
 @Component
@@ -85,12 +87,17 @@ class TrelloRouter : RouteBuilder() {
                 .to("bean:$TRELLO_SERVICE?method=moveTask")
                 .endRest()
 
-        //yes, I know about the warning, still, this is better than copy pasting same code twice
         onException(CamelAuthorizationException::class.java, UnauthorizedAccessException::class.java)
                 .handled(true)
                 .setHeader(Exchange.CONTENT_TYPE, constant(APPLICATION_JSON))
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(SC_FORBIDDEN))
                 .setBody(simple("${null}"))
+
+        onException(InvalidArgumentException::class.java)
+                .handled(true)
+                .setHeader(Exchange.CONTENT_TYPE, constant(APPLICATION_JSON))
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(SC_BAD_REQUEST))
+                .setBody(constant("Invalid parameter"))
     }
 
 }

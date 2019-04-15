@@ -95,6 +95,9 @@ curl -v 'localhost:8082/v1/trello/boards/4/columns/10/tasks' -H 'Authorization: 
 curl -v -X DELETE 'localhost:8082/v1/trello/boards/4/columns/10/tasks/11' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
 #przeniesienie taska do kolumny
 curl -v -X POST 'localhost:8082/v1/trello/boards/3/columns/7/tasks/8/move?toColumn=9' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
+#zmiana pozycji kolumny, w parametrze toPosition podajemy na ktorej pozycji dana kolumna ma sie znalezc zaczynajac od zera
+#czyli w przykladzie ponizej przenosze kolumne o identyfikatorze 13 na pozycje 0, czyli poczatek listy
+curl -v -X POST 'localhost:8082/v1/trello/boards/3/columns/13/move?toPosition=0' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
 ```
 W dla nieautoryzownego usera backend zwraca 403 Forbidden!
 
