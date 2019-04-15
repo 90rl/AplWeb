@@ -50,29 +50,6 @@ class Trello {
         exchange.getIn().body = getUserBoards()
     }
 
-    fun getBoard(@Header("boardId") boardId: Long, exchange: Exchange) {
-        logger.info("Getting board: {}", boardId)
-        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
-        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoard(boardId)
-    }
-
-    fun deleteBoard(@Header("boardId") boardId: Long, exchange: Exchange) {
-        logger.info("Deleting board: {}", boardId)
-        val name = SecurityContextHolder.getContext().authentication.name
-        val user = userRepository.getByName(name)
-        user.boards.removeAll { b -> b.id == boardId }
-        userRepository.save(user)
-
-        if (userRepository.countByBoards_Id(boardId) == 0) {
-            logger.info("Deleting board permanently {}", boardId)
-            boardRepository.deleteById(boardId)
-        }
-        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
-        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoards()
-    }
-
     fun addBoard(@Body form: NameForm, exchange: Exchange) {
         logger.info("Adding board with name: {}", form.name)
         val name = SecurityContextHolder.getContext().authentication.name
@@ -84,18 +61,41 @@ class Trello {
         exchange.getIn().body = getUserBoards()
     }
 
+    fun getBoard(@Header("boardId") boardId: Long, exchange: Exchange) {
+        logger.info("Getting board: {}", boardId)
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
+        exchange.getIn().body = getBoardById(boardId)
+    }
+
+    fun deleteBoard(@Header("boardId") boardId: Long, exchange: Exchange) {
+        logger.info("Deleting board: {}", boardId)
+        val name = SecurityContextHolder.getContext().authentication.name
+        val user = userRepository.getByName(name)
+        user.boards.removeAll { b -> b.id == boardId }
+        userRepository.save(user)
+
+        if (!userRepository.existsByBoards_Id(boardId)) {
+            logger.info("Deleting board permanently {}", boardId)
+            boardRepository.deleteById(boardId)
+        }
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
+        exchange.getIn().body = getUserBoards()
+    }
+
     fun addColumn(@Body form: NameForm?, @Header("boardId") boardId: Long, exchange: Exchange) {
         logger.info("Adding column with name: {} to board: {}", form?.name, boardId)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoard(1)
+        exchange.getIn().body = getBoardById(boardId)
     }
 
     fun deleteColumn(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long, exchange: Exchange) {
         logger.info("Deleting column: {} in board: {}", columnId, boardId)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoard(1)
+        exchange.getIn().body = getBoardById(boardId)
     }
 
     fun moveColumn(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long,
@@ -103,7 +103,7 @@ class Trello {
         logger.info("Reordering columns: {} and: {}", columnId, toColumn)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoard(1)
+        exchange.getIn().body = getBoardById(boardId)
     }
 
     fun addTask(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long,
@@ -111,7 +111,7 @@ class Trello {
         logger.info("Adding task to board: {} to column {}, task name: ", boardId, columnId, form?.name)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoard(1)
+        exchange.getIn().body = getBoardById(boardId)
     }
 
     fun deleteTask(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long,
@@ -119,7 +119,7 @@ class Trello {
         logger.info("Deleting task from board: {} on column {}, taskId: ", boardId, columnId, taskId)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoard(1)
+        exchange.getIn().body = getBoardById(boardId)
     }
 
     fun moveTask(@Header("boardId") boardId: Long, @Header("columnId") columnId: Long,
@@ -128,7 +128,7 @@ class Trello {
         logger.info("Moving task: {} toColumn: {}", taskId, toColumn)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_OK)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
-        exchange.getIn().body = getUserBoard(1)
+        exchange.getIn().body = getBoardById(boardId)
     }
 
     private fun getUserBoards(): Boards {
@@ -137,6 +137,11 @@ class Trello {
         val boards: List<Board> = boardModels.stream().map { model -> Board(model.id, model.name) }
                 .collect(Collectors.toList())
         return Boards(boards)
+    }
+
+    private fun getBoardById(boardId: Long): UserBoard {
+        val boardModel: BoardModel = boardRepository.findById(boardId).get()
+        return boardModel.toUserBoard()
     }
 
     companion object {

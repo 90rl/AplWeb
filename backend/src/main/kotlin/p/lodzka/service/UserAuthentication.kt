@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import p.lodzka.config.ROLE_USER
@@ -17,9 +16,6 @@ import p.lodzka.repository.UserRepository
 @Service
 @Transactional(readOnly = true)
 class UserAuthentication : UserDetailsService {
-
-    @Autowired
-    lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
 
     @Autowired
     lateinit var userRepository: UserRepository

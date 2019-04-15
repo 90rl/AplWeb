@@ -14,5 +14,5 @@ interface UserRepository : CrudRepository<UserModel, Long> {
     @EntityGraph(value = "UserModel.boards", type = EntityGraphType.LOAD)
     fun getByName(name: String): UserModel
 
-    fun countByBoards_Id(id: Long): Int
+    fun existsByBoards_Id(id: Long): Boolean
 }

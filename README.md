@@ -81,6 +81,8 @@ curl -v 'localhost:8082/v1/auth/register' -d '{"name": "damian", "email": "damia
 curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic ZGFtaWFuOjEyMw==' -d '{"name":"tabliczka"}'
 #wyswietlenie listy tablic
 curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
+#wyswietlenie tablicy
+curl -v 'localhost:8082/v1/trello/boards/4' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
 #usuniecie tablicy
 curl -v -X DELETE 'localhost:8082/v1/trello/boards/2' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
 ```
