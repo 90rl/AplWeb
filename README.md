@@ -85,6 +85,15 @@ curl -v 'localhost:8082/v1/trello/boards' -H 'Authorization: Basic ZGFtaWFuOjEyM
 curl -v 'localhost:8082/v1/trello/boards/4' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
 #usuniecie tablicy
 curl -v -X DELETE 'localhost:8082/v1/trello/boards/2' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
+#dodanie kolumny
+curl -v 'localhost:8082/v1/trello/boards/4/columns' -H 'Authorization: Basic ZGFtaWFuOjEyMw==' -d '{"name":"kolumna1"}'
+#usuniecie kolumny
+curl -v -X DELETE 'localhost:8082/v1/trello/boards/4/columns/9' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
+#dodanie taska
+curl -v 'localhost:8082/v1/trello/boards/4/columns/10/tasks' -H 'Authorization: Basic ZGFtaWFuOjEyMw==' -d '{"name":"task12", "description":"opis taska"}'
+
+#usuniecie taska
+curl -v -X DELETE 'localhost:8082/v1/trello/boards/4/columns/10/tasks/11' -H 'Authorization: Basic ZGFtaWFuOjEyMw=='
 ```
 W dla nieautoryzownego usera backend zwraca 403 Forbidden!
 

@@ -74,7 +74,7 @@ class TrelloRouter : RouteBuilder() {
                 .endRest()
 
                 .post("/boards/{boardId}/columns/{columnId}/move")
-                .param().name("toColumn").type(RestParamType.query).endParam()
+                .param().name("toPosition").type(RestParamType.query).endParam()
                 .route().process(authProcessor).policy(USER)
                 .to("bean:$TRELLO_SERVICE?method=moveColumn")
                 .endRest()
