@@ -1,4 +1,4 @@
-package p.lodzka.service
+package p.lodzka.service.objects
 
 open class Board(
         var id: Long? = null,

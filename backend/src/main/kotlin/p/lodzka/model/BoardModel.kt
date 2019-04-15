@@ -1,7 +1,7 @@
 package p.lodzka.model
 
-import p.lodzka.service.Column
-import p.lodzka.service.UserBoard
+import p.lodzka.service.objects.Column
+import p.lodzka.service.objects.UserBoard
 import javax.persistence.*
 
 @Entity

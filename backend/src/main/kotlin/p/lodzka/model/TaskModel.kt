@@ -1,6 +1,6 @@
 package p.lodzka.model
 
-import p.lodzka.service.Task
+import p.lodzka.service.objects.Task
 import javax.persistence.*
 
 @Entity

@@ -21,6 +21,9 @@ import p.lodzka.repository.BoardRepository
 import p.lodzka.repository.ColumnRepository
 import p.lodzka.repository.TaskRepository
 import p.lodzka.repository.UserRepository
+import p.lodzka.service.objects.Board
+import p.lodzka.service.objects.Boards
+import p.lodzka.service.objects.UserBoard
 import java.util.stream.Collectors
 import javax.servlet.http.HttpServletResponse.SC_CREATED
 import javax.servlet.http.HttpServletResponse.SC_OK
