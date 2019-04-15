@@ -22,7 +22,7 @@ import java.util.*
 class SecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     @Autowired
-    private val userDetailsService: UserDetailsService? = null
+    private lateinit var  userDetailsService: UserDetailsService
 
 
     @Throws(Exception::class)

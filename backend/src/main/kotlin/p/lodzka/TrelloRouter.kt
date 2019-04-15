@@ -90,7 +90,7 @@ class TrelloRouter : RouteBuilder() {
                 .handled(true)
                 .setHeader(Exchange.CONTENT_TYPE, constant(APPLICATION_JSON))
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(SC_FORBIDDEN))
-
+                .setBody(simple("${null}"))
     }
 
 }
