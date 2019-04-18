@@ -19,18 +19,8 @@ sudo usermod -a -G docker $USER
 
 ## Budowanie
 
-**UWAGA** wszystkie polecenia poniżej, poza `mvn clean install` wykonywać w katalogu głównym projektu (tam gdzie plik docker-compose.yml)
-
-### 1. Build backend.jar
-
-```bash
-cd backend
-mvn clean install
-cd ..
-```
-
-### 2. Build frontend + backend  docker images
-Przy pierwszym uruchamianiu budowanie obrazów może potrwać nawet 20m min
+### Build frontend + backend  docker images
+Przy pierwszym uruchamianiu budowanie obrazów może potrwać nawet 20 min
 ```bash
 docker-compose build
 ```
