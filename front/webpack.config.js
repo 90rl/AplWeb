@@ -24,7 +24,8 @@ var config = {
     contentBase: "./public",
     colors: true,
     historyApiFallback: true,
-    inline: true
+    inline: true,
+	host: '0.0.0.0'
   },
 }
 
