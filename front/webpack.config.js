@@ -21,7 +21,6 @@ var config = {
     }]
   },
   devServer: {
- host: '0.0.0.0',
     contentBase: "./public",
     colors: true,
     historyApiFallback: true,

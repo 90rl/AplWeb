@@ -1,36 +1,1 @@
-import React from 'react';
-import {render} from 'react-dom';
-import KanbanBoard from './KanbanBoard';
-
-let cardsList = [
-  {
-    id: 1,
-    title: "Sprawdzić wszystko ponownie",
-    description: "Upewnić się czy wszystko działa poprawnie",
-    status: "in-progress",
-    tasks: []
-  },
-  {
-    id: 2,
-    title: "Sprawdzić todo",
-    description: "Upewnić się czy wszystko działa poprawnie",
-    status: "todo",
-    tasks: [
-      {
-        id: 1,
-        name: "Przykłady",
-        done: true
-      }
-    ]
-  },
-  {
-    id: 3,
-    title: "Brak słów - tytuł",
-    description: "Brak słów opis zadania",
-    status: "hardissue",
-    tasks: [
-	
-	]
-  }
-];
-render(<KanbanBoard cards={cardsList} />, document.getElementById('root'));
+import React from 'react';import { render } from 'react-dom';import { Router, Route } from 'react-router';import createBrowserHistory from 'history/lib/createBrowserHistory'import KanbanBoardContainer from './components/KanbanBoardContainer';import KanbanBoard from './components/KanbanBoard';import EditCard from './components/EditCard';import NewCard from './components/NewCard';render((  <Router history={createBrowserHistory()}>    <Route component={KanbanBoardContainer}>      <Route path="/" component={KanbanBoard}>        <Route path="new" component={NewCard} />        <Route path="edit/:card_id" component={EditCard} />      </Route>    </Route>  </Router>), document.getElementById('root'));

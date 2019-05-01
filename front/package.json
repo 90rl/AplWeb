@@ -5,8 +5,8 @@
   "author": "Cássio Zen",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --progress",
-    "build": "NODE_ENV=production webpack -p --progress --colors"
+    "start": "node_modules/.bin/webpack-dev-server --progress",
+    "build": "NODE_ENV=production node_modules/.bin/webpack -p --progress --colors"
   },
   "devDependencies": {
     "babel-core": "~6.7.*",
@@ -17,7 +17,18 @@
     "webpack-dev-server": "~1.14.*"
   },
   "dependencies": {
+    "babel-polyfill": "~6.7.*",
+    "flux": "^2.1.1",
+    "history": "^1.13.0",
+    "marked": "^0.3.5",
     "react": "^15.0.0",
-    "react-dom": "^15.0.0"
+    "react-addons-css-transition-group": "^15.0.0",
+    "react-addons-shallow-compare": "^15.0.0",
+    "react-addons-update": "^15.0.0",
+    "react-dnd": "^2.1.4",
+    "react-dnd-html5-backend": "^2.1.2",
+    "react-dom": "^15.0.0",
+    "react-router": "^1.0.0",
+    "whatwg-fetch": "^0.11.0"
   }
 }
