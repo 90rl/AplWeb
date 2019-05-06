@@ -76,14 +76,10 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <!--<version>3.9</version>-->
         </dependency>
-
 
         <!-- Camel -->
         <dependency>
@@ -94,7 +90,6 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream-starter</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.camel</groupId>
