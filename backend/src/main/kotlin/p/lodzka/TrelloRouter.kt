@@ -3,6 +3,7 @@ package p.lodzka
 import org.apache.camel.CamelAuthorizationException
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.model.dataformat.JsonLibrary
 import org.apache.camel.model.rest.RestBindingMode
 import org.apache.camel.model.rest.RestParamType
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,8 +13,10 @@ import p.lodzka.form.TaskForm
 import p.lodzka.form.RegisterForm
 import p.lodzka.processor.AuthProcessor
 import p.lodzka.form.NameForm
+import p.lodzka.processor.UserValidationProcessor
 import p.lodzka.service.InvalidArgumentException
 import p.lodzka.service.UnauthorizedAccessException
+import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST
 import javax.servlet.http.HttpServletResponse.SC_FORBIDDEN
 
@@ -23,6 +26,10 @@ class TrelloRouter : RouteBuilder() {
     @Autowired
     private lateinit var authProcessor: AuthProcessor
 
+    @Autowired
+    private lateinit var validationProcessor: UserValidationProcessor
+
+
     override fun configure() {
         restConfiguration().component("restlet").host("0.0.0.0").port(8082).bindingMode(RestBindingMode.auto)
 
@@ -31,7 +38,13 @@ class TrelloRouter : RouteBuilder() {
         rest("$V1/auth")
                 .consumes(APPLICATION_JSON).produces(APPLICATION_JSON)
                 .post("/register").type(RegisterForm::class.java)
+                .route().process(validationProcessor)
+                .choice()
+                .`when` (header(Exchange.HTTP_RESPONSE_CODE).isNotEqualTo(SC_BAD_REQUEST))
                 .to("bean:$TRELLO_SERVICE?method=register")
+                .otherwise()
+                .marshal().json(JsonLibrary.Jackson)
+                .endRest()
 
         rest(V1 + TRELLO)
                 .consumes(APPLICATION_JSON).produces(APPLICATION_JSON)

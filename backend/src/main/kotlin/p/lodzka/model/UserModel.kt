@@ -8,7 +8,7 @@ import javax.persistence.*
         attributeNodes = [NamedAttributeNode("boards")])
 class UserModel(
         @Id @GeneratedValue var id: Long = 0,
-        @Column(unique = true) var name: String? = null,
+        @Column(unique = true) var name: String,
         var password: String,
         var email: String,
         @ManyToMany(cascade = [CascadeType.ALL])

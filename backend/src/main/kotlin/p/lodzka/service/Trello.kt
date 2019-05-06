@@ -50,7 +50,7 @@ class Trello {
     fun register(@Body form: RegisterForm, exchange: Exchange) {
         logger.info("Name: {}", form.name)
         val password = bCryptPasswordEncoder.encode(form.password)
-        val user = UserModel(name = form.name, email = form.email, password = password)
+        val user = UserModel(name = form.name!!, email = form.email!!, password = password)
         userRepository.save(user)
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, SC_CREATED)
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
