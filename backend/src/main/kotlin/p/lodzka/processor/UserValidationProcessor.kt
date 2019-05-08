@@ -41,9 +41,10 @@ class UserValidationProcessor : Processor {
             exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpServletResponse.SC_BAD_REQUEST)
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
             exchange.getIn().body = ErrorResponse(errorId = "UVP_TR005", description = "Użytkownik już istnieje")
+        } else if (userRepository.existsByEmail(form.email!!)) {
+            exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpServletResponse.SC_BAD_REQUEST)
+            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON)
+            exchange.getIn().body = ErrorResponse(errorId = "UVP_TR006", description = "Ten adres email już istnieje w bazie danych")
         }
-
-
     }
-
 }
