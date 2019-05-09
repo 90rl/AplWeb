@@ -19,6 +19,7 @@ interface UserRepository : CrudRepository<UserModel, Long> {
 
     fun existsByBoards_Id(id: Long): Boolean
     fun existsByName(name: String): Boolean
+    fun existsByEmail(email: String): Boolean
 }
 
 @Repository
