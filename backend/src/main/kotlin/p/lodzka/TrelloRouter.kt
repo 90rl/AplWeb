@@ -9,14 +9,14 @@ import org.apache.camel.model.rest.RestParamType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import p.lodzka.config.*
-import p.lodzka.form.TaskForm
-import p.lodzka.form.RegisterForm
-import p.lodzka.processor.AuthProcessor
 import p.lodzka.form.NameForm
+import p.lodzka.form.RegisterForm
+import p.lodzka.form.TaskForm
+import p.lodzka.processor.AuthProcessor
+import p.lodzka.processor.BoardValidationProcessor
 import p.lodzka.processor.UserValidationProcessor
 import p.lodzka.service.InvalidArgumentException
 import p.lodzka.service.UnauthorizedAccessException
-import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST
 import javax.servlet.http.HttpServletResponse.SC_FORBIDDEN
 
@@ -28,6 +28,9 @@ class TrelloRouter : RouteBuilder() {
 
     @Autowired
     private lateinit var validationProcessor: UserValidationProcessor
+
+    @Autowired
+    private lateinit var boardValidation: BoardValidationProcessor
 
 
     override fun configure() {
@@ -55,7 +58,12 @@ class TrelloRouter : RouteBuilder() {
 
                 .post("/boards").type(NameForm::class.java)
                 .route().process(authProcessor).policy(USER)
+                .process(boardValidation)
+                .choice()
+                .`when`(header(Exchange.HTTP_RESPONSE_CODE).isNotEqualTo(SC_BAD_REQUEST))
                 .to("bean:$TRELLO_SERVICE?method=addBoard")
+                .otherwise()
+                .marshal().json(JsonLibrary.Jackson)
                 .endRest()
 
                 .get("/boards/{boardId}")
